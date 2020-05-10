@@ -45,6 +45,96 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
+// copy constructor
+ChatBot::ChatBot(const ChatBot &source) {
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    // Assign data from source
+    if (source._image != NULL) {
+        this->_image = new wxBitmap(*source._image);
+    } else {
+        this->_image = NULL;
+    }
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+}
+
+// copy assignment operator
+ChatBot &ChatBot::operator=(const ChatBot &source) {
+    std::cout << "ChatBot Copy Operator" << std::endl;
+
+    // Check if source is the same as self
+    if (this == &source) { return *this; }
+
+    // Delete and free memory, if image exists
+    // Other pointers are not deleted, because they are not owned by the ChatBot class.
+    if(_image != NULL) {
+        delete _image;
+    }
+
+    // Assign data from source
+    if (source._image != NULL) {
+        this->_image = new wxBitmap(*source._image);
+    } else {
+        this->_image = NULL;
+    }
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    return *this;
+}
+
+// move constructor
+ChatBot::ChatBot(ChatBot &&source) {
+    std::cout << "ChatBot Move Constructor" << std::endl;
+
+    // Assign data from source
+    if (source._image != NULL) {
+        this->_image = new wxBitmap(*source._image);
+    } else {
+        this->_image = NULL;
+    }
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    // Remove owned values from source
+    source._image = NULL;
+}
+
+// move assignment operator
+ChatBot &ChatBot::operator=(ChatBot &&source) {
+    std::cout << "ChatBot Move Operator" << std::endl;
+    
+    // Check if source is the same as self
+    if (this == &source) { return *this; }
+
+    // Remove owned values
+    if (this->_image != NULL) {
+        delete this->_image;
+    }
+
+    // Assign data from source
+    if (source._image != NULL) {
+        this->_image = new wxBitmap(*source._image);
+    } else {
+        this->_image = NULL;
+    }
+    this->_currentNode = source._currentNode;
+    this->_rootNode = source._rootNode;
+    this->_chatLogic = source._chatLogic;
+    this->_chatLogic->SetChatbotHandle(this);
+
+    // Remove owned values from source
+    source._image = NULL;
+
+    return *this;
+}
+
 ////
 //// EOF STUDENT CODE
 
