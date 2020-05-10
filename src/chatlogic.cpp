@@ -11,14 +11,7 @@
 #include "graphedge.h"
 #include "graphnode.h"
 
-ChatLogic::ChatLogic() {
-  // create instance of chatbot
-  _chatBot = new ChatBot("../images/chatbot.png");
-
-  // add pointer to chatlogic so that chatbot answers can be passed on to the
-  // GUI
-  _chatBot->SetChatLogicHandle(this);
-}
+ChatLogic::ChatLogic() {}
 
 ChatLogic::~ChatLogic() {}
 
@@ -100,9 +93,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
 
             // check if node with this ID exists already
             // Comment: Replaced raw pointer by a REFERENCE of the unique
-            // pointer. Usage of pure unique pointers would not work because
-            //          the function find_if would try to make copies of the
-            //          unique pointers (forbidden!).
+            //          pointer. Usage of pure unique pointers would not work
+            //          because the function find_if would try to make copies of
+            //          the unique pointers (forbidden!).
             auto newNode =
                 std::find_if(_nodes.begin(), _nodes.end(),
                              [&id](auto &node) { return node->GetID() == id; });
@@ -186,11 +179,18 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
     }
   }
 
-  // add chatbot to graph root node
-  ChatBot move_bot = ChatBot(*_chatBot);
+  // create instance of chatbot
+  ChatBot bot = ChatBot("../images/chatbot.png");
+  // set _chatBot value for GUI communication
+  _chatBot = &bot;
 
-  _chatBot->SetRootNode(rootNode);
-  rootNode->MoveChatbotHere(std::move(move_bot));
+  // add pointer to chatlogic so that chatbot answers can be passed on to the
+  // GUI
+  bot.SetChatLogicHandle(this);
+
+  // add chatbot to graph root node
+  bot.SetRootNode(rootNode);
+  rootNode->MoveChatbotHere(std::move(bot));
 }
 
 void ChatLogic::SetPanelDialogHandle(ChatBotPanelDialog *panelDialog) {
